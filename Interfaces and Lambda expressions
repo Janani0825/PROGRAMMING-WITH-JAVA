@@ -1,0 +1,141 @@
+import java.util.*;
+ interface CreditCardIntf {
+        public double buyInRupees( double amount);
+        public double buyInDollars(double amount);
+}
+class Bank implements CreditCardIntf {
+        private double balance;
+        public Bank(double balance) {
+                this.balance = balance;
+        }
+        @Override
+        public double buyInRupees(double amount) {
+                if(amount >= balance) {
+                        System.out.println("Insufficient Balance!");
+                        return 0;
+                }
+                else {
+                        balance = balance - amount;
+                        return balance;
+                }
+        }
+
+        @Override
+        public double buyInDollars(double amount) {
+                double indAmount = amount * 75;
+                if(indAmount >= balance) {
+                        System.out.println("Insufficient Balance!");
+                        return 0;
+                }
+                else {
+                        balance = balance - indAmount;
+                        return balance;
+                }
+        }
+        public double getAmount() {
+                Scanner sc = new Scanner(System.in);
+                System.out.println("Enter Amount:");
+                double amount;
+                amount = sc.nextDouble();
+                return amount;
+        }
+}
+public class BankPgm {
+        public static void main(String[] args) {
+                Bank b1;
+                Scanner sc = new Scanner(System.in);
+                int ch;
+                do {
+                        System.out.println("1.Rupees");
+                        System.out.println("2.Dollars");
+                        System.out.println("3.Exit");
+                        System.out.println("Enter Choice:");
+                        ch = sc.nextInt();
+                        if(ch==1) {
+                                System.out.println("Enter Balance:");
+                                double balance;
+                                balance = sc.nextDouble();
+                                b1 = new Bank(balance);
+                                double x;
+                                x = b1.getAmount();
+                                double a;
+                                a = b1.buyInRupees(x);
+                                if(a!= 0) {
+                                        System.out.println("Successfully Withdrawn! , BALANCE:"+a);
+                                }
+                                else
+                                        System.out.println("Cannot Withdraw");
+
+                        }
+                        else if (ch==2) {
+                                System.out.println("Enter Balance:");
+                                double balance;
+                                balance = sc.nextDouble();
+                                b1 = new Bank(balance);
+                                double x;
+                                x = b1.getAmount();
+                                double a;
+                                a = b1.buyInDollars(x);
+                                if(a!= 0) {
+                                        System.out.println("Successfully Withdrawn! , BALANCE:"+a);
+                                }
+                                else
+                                        System.out.println("Cannot Withdraw");
+                        }
+                        else {
+                                System.out.println("Invalid Choice!Exiting...");
+                                break;
+                        }
+                }while(ch!=3);
+
+        }
+
+}
+---------------------------------------------------------------------------------------------
+import java.util.Scanner;
+
+public class Calculator {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+
+        Operation add = (a, b) -> System.out.println("Result: " + (a + b));
+        Operation subtract = (a, b) -> System.out.println("Result: " + (a - b));
+        Operation multiply = (a, b) -> System.out.println("Result: " + (a * b));
+        Operation divide = (a, b) -> {
+            if (b != 0) {
+                System.out.println("Result: " + (a / b));
+            } else {
+                System.out.println("Invalid divisor: Division by zero");
+            }
+        };
+
+
+        System.out.print("\nEnter first number: ");
+        double num1 = sc.nextDouble();
+
+        System.out.print("Enter second number: ");
+        double num2 = sc.nextDouble();
+
+        System.out.println("Choose operation: +  -  *  /");
+        String op = sc.next();
+
+        if (op.equals("+")) {
+            add.calculate(num1, num2);
+        } else if (op.equals("-")) {
+            subtract.calculate(num1, num2);
+        } else if (op.equals("*")) {
+            multiply.calculate(num1, num2);
+        } else if (op.equals("/")) {
+            divide.calculate(num1, num2);
+        } else {
+            System.out.println("Invalid operation");
+        }
+
+        sc.close();
+    }
+}
+interface Operation {
+    void calculate(double a, double b);
+}
+
