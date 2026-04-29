@@ -1,0 +1,91 @@
+import java.util.*;
+public class SportsPgm {
+
+        public static void main(String[] args) {
+                    Scanner sc = new Scanner(System.in);
+                    int ch;
+                    do {
+                    System.out.println("1.Indoor ");
+                    System.out.println("2.Outdoor");
+                    System.out.println("3.Exit");
+                    System.out.println("Enter Choice:");
+                    ch=sc.nextInt();
+                    if (ch==1) {
+                System.out.println("Enter Details(Indoor-Sport Name, No. of Players, Court Area(sq mtr))");
+                String sname = sc.next();
+                int players = sc.nextInt();
+                double courtArea = sc.nextDouble();
+                Sports ind = new Indoor(sname, players, courtArea);
+                ind.displayInfo();
+                System.out.println("Calculated Intensity: "+ind.calculateIntensity());
+                    }
+                    else if(ch==2)
+                    {
+                System.out.println("Enter Details(Outdoor-Sport Name, No. of Players, Field Size(sq mtr))");
+                String sname1 = sc.next();
+                int players1 = sc.nextInt();
+                double fieldSize = sc.nextDouble();
+                Sports ind = new Outdoor(sname1, players1, fieldSize, fieldSize);
+                ind.displayInfo();
+                System.out.println("Calculated Intensity: " +ind.calculateIntensity());
+                    }
+                    else
+                        System.out.println("Invalid Choice!");
+                    } while(ch!=3);
+                sc.close();
+        }
+
+}
+class Sports {
+          String name;
+            int players;
+
+            public Sports(String name, int players) {
+                this.name = name;
+                this.players = players;
+            }
+
+            public double calculateIntensity() {
+                return 0.0;
+            }
+
+            public void displayInfo() {
+                System.out.println("Sport Name: " + name);
+                System.out.println("Number of Players: " + players);
+            }
+}
+class Outdoor extends Sports {
+        double fieldSize;
+    public Outdoor(String name, int players, double fieldsize, double fieldSize) {
+        super(name, players);
+        this.fieldSize = fieldSize;
+    }
+    @Override
+    public double calculateIntensity() {
+        return (double) players * 50 / fieldSize;
+    }
+
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.println("Field Size: " + fieldSize + " sq meters");
+    }
+}
+class Indoor extends Sports {
+        double courtArea;
+    public Indoor(String name, int players, double courtArea) {
+        super(name, players);
+        this.courtArea = courtArea;
+    }
+    @Override
+    public double calculateIntensity() {
+        return (double) players / courtArea * 100;
+    }
+
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.println("Court Area: " + courtArea + " sq meters");
+    }
+}
+
