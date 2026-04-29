@@ -1,0 +1,50 @@
+import java.util.Scanner;
+class Employee {
+   String empName;
+   int empId;
+   long empMobile;
+   String empAddress;
+   String empMail;
+   float empBasicPay;
+   public void getEmployee() {
+      Scanner scan = new Scanner(System.in);
+      System.out.println("Enter the Name:");
+      empName=scan.next();
+      System.out.println("Enter the ID:");
+      empId=scan.nextInt();
+      System.out.println("Enter the Mobile no:");
+      empMobile=scan.nextLong();
+      System.out.println("Enter the Address:");
+      empAddress=scan.next();
+      System.out.println("Enter the Mail id:");
+      empMail=scan.next();
+      System.out.println("Enter the Basicpay:");
+      empBasicPay=scan.nextFloat();
+   }
+   public void putEmployee(){
+      System.out.println("employee name:" + empName);
+      System.out.println("employee id:" + empId);
+      System.out.println("employee mobile:" + empMobile);
+      System.out.println("employee address:" + empAddress);
+      System.out.println("employee mail:" + empMail);
+      System.out.println("employee basicpay:" + empBasicPay);
+   }
+   public void computeEmp(){
+      float da=0.97f*empBasicPay;
+      float hra=0.1f*empBasicPay;
+      float grossSal=empBasicPay+da+hra;
+      float pf=0.12f*empBasicPay;
+      float sc=0.001f*empBasicPay;
+      float netSal=grossSal-pf-sc;
+      System.out.println("Gross salary:" + grossSal);
+      System.out.println("net salary:" + netSal);
+   }
+}
+public class EmployeePgm {
+   public static void main(String[] args){
+      Employee e=new Employee();
+      e.getEmployee();
+      e.putEmployee();
+      e.computeEmp();
+      }
+}
