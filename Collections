@@ -1,0 +1,166 @@
+import java.util.ArrayList;
+public class ArrayInCollections {
+    public static void main(String[] args) {
+        ArrayList<int[]> listOfArrays = new ArrayList<>();
+        listOfArrays.add(new int[]{1, 2, 3});
+        listOfArrays.add(new int[]{4, 5});
+        listOfArrays.add(new int[]{6, 7, 8, 9});
+        for (int[] array : listOfArrays) {
+            System.out.print("Array elements: ");
+            for (int num : array) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+--------------------------------------------------------------------------------------------
+import java.util.HashSet;
+import java.util.Set;
+public class SetExample {
+    public static void main(String[] args) {
+        Set<String> colors = new HashSet<>();
+
+        colors.add("Red");
+        colors.add("Green");
+        colors.add("Blue");
+        colors.add("Green"); 
+        System.out.println("Set of colors:");
+        for (String color : colors) {
+            System.out.println(color);
+        }
+        System.out.println("\nDoes the set contain 'Red'? " + colors.contains("Red"));
+        colors.remove("Blue");
+        System.out.println("\nAfter removing 'Blue':");
+        colors.forEach(System.out::println);
+    }
+}
+---------------------------------------------------------------------------------------------------------------
+import java.util.ArrayList;
+import java.util.List;
+
+public class ListExample {
+    public static void main(String[] args) {
+        List<String> fruits = new ArrayList<>();
+
+        fruits.add("Apple");
+        fruits.add("Banana");
+        fruits.add("Orange");
+        fruits.add("Mango");
+
+        System.out.println("List of fruits:");
+        for (String fruit : fruits) {
+            System.out.println(fruit);
+        }
+
+        System.out.println("\nFruit at index 2: " + fruits.get(2));
+
+        fruits.remove("Banana");
+        System.out.println("\nAfter removing Banana:");
+
+        fruits.forEach(System.out::println);
+    }
+}
+----------------------------------------------------------------------------------------------------
+import java.util.HashSet;
+
+public class HashSetExample {
+    public static void main(String[] args) {
+        HashSet<String> animals = new HashSet<>();
+
+        animals.add("Dog");
+        animals.add("Cat");
+        animals.add("Horse");
+        animals.add("Cat"); 
+
+        System.out.println("Animals in the HashSet:");
+        for (String animal : animals) {
+            System.out.println(animal);
+        }
+        System.out.println("\nContains 'Dog'? " + animals.contains("Dog"));
+        animals.remove("Horse");
+        System.out.println("\nAfter removing 'Horse':");
+        animals.forEach(System.out::println);
+    }
+}
+
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+import java.util.ArrayList;
+import java.util.Iterator;
+public class ColorList {
+
+        public static void main(String[] args) {
+                ArrayList<String> colors = new ArrayList<>();
+                colors.add("Pink");
+                colors.add("Blue");
+                colors.add("Green");
+                System.out.println("List Of Colors : " + colors);
+                Iterator<String> it = colors.iterator();
+                while(it.hasNext()) {
+                        String a = it.next();
+                        System.out.println(a);
+                }
+
+        }
+
+}
+----------------------------------------------------------------------------------------------------------------------
+import java.util.Stack;
+class Student {
+    int id;
+    String name;
+    float cgpa;
+    Student(int id, String name, float cgpa) {
+        this.id = id;
+        this.name = name;
+        this.cgpa = cgpa;
+    }
+}
+public class StudentPgm {
+    public static void main(String[] args) {
+        Stack<Student> s = new Stack<>();
+        s.add(new Student(1, "Janani", 98.72f));
+        s.add(new Student(2, "Kanya", 97.91f));
+        s.add(new Student(3, "Rubika", 99.82f));
+        s.add(new Student(4, "Kanya", 96.91f));
+        System.out.println("Student Details");
+        while (!s.isEmpty()) {
+            Student stud = s.pop();
+            System.out.println("ID: " + stud.id + ", Name: " + stud.name + ", CGPA: " + stud.cgpa);
+        }
+    }
+}
+----------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class QueueToStack {
+
+    public static void main(String[] args) {
+        Queue<Integer> q1 = new PriorityQueue<>();
+        Queue<Integer> q2 = new PriorityQueue<>();
+        q1.add(1);
+        q1.add(2);
+        q1.add(3);
+        q2.add(4);
+        q2.add(5);
+        q2.add(6);
+        System.out.println("Elements in Queue 1 : " + q1);
+        System.out.println("Elements in Queue 2 : " + q2);
+        Stack<Integer> s = new Stack<>();
+        for (int num1 : q1) {
+            s.add(num1);
+        }
+        for (int num2 : q2) {
+            s.add(num2);
+        }
+        System.out.println("Stack after adding elements: " + s);
+        System.out.println("Displaying elements by popping from stack:");
+        while (!s.isEmpty()) {
+            System.out.println(s.pop());
+        }
+    }
+}
+
