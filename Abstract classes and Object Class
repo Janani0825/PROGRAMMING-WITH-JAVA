@@ -1,0 +1,184 @@
+import java.util.*;
+public class TransportationPgm {
+
+        public static void main(String[] args) {
+                Scanner sc = new Scanner(System.in);
+                int ch;
+                do {
+                System.out.println("1.Train ");
+                System.out.println("2.Bus");
+                System.out.println("3.Bike");
+                System.out.println("4.Cycle");
+                System.out.println("5.Exit");
+                System.out.println("Enter Choice:");
+                ch = sc.nextInt();
+                if(ch==1) {
+                System.out.println("ENTER FOR TRAIN(Time(hr), Distance, Coach(AC/NON-AC),No.OfPassengers");
+                float time = sc.nextFloat();
+                float distance = sc.nextFloat();
+                String coach = sc.next();
+                int nop = sc.nextInt();
+                Train tr = new Train(time,distance,coach,nop);
+                tr.displayDetails();
+                }
+                else if (ch==2) {
+                System.out.println("ENTER FOR BUS(Time(hr), Distance, Seat(Sleeper/Non-Sleeper),No.OfPassengers");
+                float time1 = sc.nextFloat();
+                float distance1 = sc.nextFloat();
+                String seat = sc.next();
+                int nop1 = sc.nextInt();
+                Bus b = new Bus(time1,distance1,seat,nop1);
+                b.displayDetails();
+                }
+                else if(ch==3) {
+                System.out.println("ENTER FOR BIKE(Time(hr), Distance, Fuel(PEtrol/Diesel),");
+                float time2 = sc.nextFloat();
+                float distance2 = sc.nextFloat();
+                String fuel = sc.next();
+                Bike bi = new Bike(time2,distance2,fuel);
+                bi.displayDetails();
+                }
+                else if(ch==4) {
+                System.out.println("ENTER FOR CYCLE(Time(hr), Distance, Rental time(in hrs)");
+                float time3 = sc.nextFloat();
+                float distance3 = sc.nextFloat();
+                int rtime = sc.nextInt();
+                Cycle cy = new Cycle(time3,distance3,rtime);
+                cy.displayDetails();
+                }
+                else
+                        System.out.println("Invalid !! TRY AGain!");
+                }while (ch!=5);
+                sc.close();
+        }
+
+}
+abstract class Transportation {
+        private float distance;
+        private float time;
+        private float speed;
+        public Transportation (float time, float distance) {
+                this.time=time;
+                this.distance=distance;
+        }
+        public float getDistance() {
+                return distance;
+        }
+        public float getTime() {
+                return time;
+        }
+        public float calSpeed() {
+                speed = distance/time;
+                return speed;
+        }
+        public abstract float calFare();
+        public void displayDetails() {
+                System.out.println("Distance:"+distance+"km");
+                System.out.println("Duration:"+time+"hr");
+        }
+}
+class Train extends Transportation{
+        private String coach;
+        private int nop;
+        private float fare;
+        private float speed;
+        public Train(float time, float distance, String coach, int nop) {
+                super(time,distance);
+                this.speed = super.calSpeed();
+                this.coach=coach;
+                this.nop=nop;
+                this.fare = calFare();
+        }
+        public float calFare() {
+                int f;
+                if (coach=="ac") {
+                        f=1200;
+                }
+                else
+                        f=1000;
+                return f*nop;
+        }
+        public void displayDetails() {
+                super.displayDetails();
+                System.out.println("Number of Passengers:"+nop);
+                System.out.println("Coach:"+coach);
+                System.out.println("Speed:"+speed+"km/hr");
+                System.out.println("Fare:"+fare+"/-");
+        }
+}
+class Bus extends Transportation{
+        private String seat;
+        private int nop;
+        private float fare;
+        private float speed;
+        public Bus(float time, float distance, String seat, int nop) {
+                super(time,distance);
+                this.speed = super.calSpeed();
+                this.seat=seat;
+                this.nop=nop;
+                this.fare = calFare();
+        }
+        public float calFare() {
+                int f;
+                if (seat=="sleeper") {
+                        f=1200;
+                }
+                else
+                        f=1000;
+                return f*nop;
+        }
+        public void displayDetails() {
+                super.displayDetails();
+                System.out.println("Number of Passsengers:"+nop);
+                System.out.println("Seat:"+seat);
+                System.out.println("Speed:"+speed+"km/hr");
+                System.out.println("Fare:"+fare+"/-");
+        }
+}
+class Bike extends Transportation{
+        private String fuel;
+        private float fare;
+        private float speed;
+        public Bike(float time, float distance, String fuel) {
+                super(time,distance);
+                this.speed = super.calSpeed();
+                this.fuel=fuel;
+                this.fare = calFare();
+        }
+        public float calFare() {
+                int f;
+                if (fuel=="petrol") {
+                        f=400;
+                }
+                else
+                        f=500;
+                return f;
+        }
+        public void displayDetails() {
+                super.displayDetails();
+                System.out.println("Fuel:"+fuel);
+                System.out.println("Speed:"+speed+"km/hr");
+                System.out.println("Fare:"+fare+"/-");
+        }
+}
+class Cycle extends Transportation{
+        private int rtime;
+        private float fare;
+        private float speed;
+        public Cycle(float time, float distance, int rtime) {
+                super(time,distance);
+                this.speed = super.calSpeed();
+                this.rtime=rtime;
+                this.fare = calFare();
+        }
+        public float calFare() {
+                int f=80;
+                return f*rtime;
+        }
+        public void displayDetails() {
+                super.displayDetails();
+                System.out.println("Rent Time:"+rtime);
+                System.out.println("Speed:"+speed+"km/hr");
+                System.out.println("Fare:"+fare+"/-");
+        }
+}
