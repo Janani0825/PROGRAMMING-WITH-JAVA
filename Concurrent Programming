@@ -1,0 +1,39 @@
+public class MultiThreadCounter {
+    private static int counter = 0;
+    private static final Object lock = new Object();
+    public static void main(String[] args) {
+        int numberOfThreads = 7;
+        int incrementsPerThread = 1000;
+        Thread[] threads = new Thread[numberOfThreads];
+        for (int i = 0; i < numberOfThreads; i++) {
+            threads[i] = new Thread(new CounterIncrementTask(incrementsPerThread), "Thread-" + (i+1));
+            threads[i].start();
+        }
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Final counter value: " + counter);
+    }
+    static class CounterIncrementTask implements Runnable {
+        private int increments;
+        public CounterIncrementTask(int increments) {
+            this.increments = increments;
+        }
+        @Override
+        public void run() {
+            for (int i = 0; i < increments; i++) {
+                incrementCounter();
+            }
+            System.out.println(Thread.currentThread().getName() + " finish increment");
+        }
+        private void incrementCounter() {
+            synchronized (lock) {
+                counter++;
+            }
+        }
+    }
+}
