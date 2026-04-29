@@ -1,0 +1,116 @@
+import java.util.Scanner;
+
+public class MatrixMultiplication {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        
+        System.out.print("Enter rows and columns for matrix A: ");
+        int rowsA = scanner.nextInt();
+        int colsA = scanner.nextInt();
+        System.out.print("Enter rows and columns for matrix B: ");
+        int rowsB = scanner.nextInt();
+        int colsB = scanner.nextInt();
+        if (colsA != rowsB) {
+            System.out.println("Matrix multiplication not possible.");
+            return;
+        }
+        int[][] matrixA = new int[rowsA][colsA];
+        int[][] matrixB = new int[rowsB][colsB];
+        int[][] result = new int[rowsA][colsB];
+        System.out.println("Enter elements of matrix A:");
+        for (int i = 0; i < rowsA; i++) {
+            for (int j = 0; j < colsA; j++) {
+                matrixA[i][j] = scanner.nextInt();
+            }
+        }
+        System.out.println("Enter elements of matrix B:");
+        for (int i = 0; i < rowsB; i++) {
+            for (int j = 0; j < colsB; j++) {
+                matrixB[i][j] = scanner.nextInt();
+            }
+        }
+        for (int i = 0; i < rowsA; i++) {
+            for (int j = 0; j < colsB; j++) {
+                for (int k = 0; k < colsA; k++) {
+                    result[i][j] += matrixA[i][k] * matrixB[k][j];
+                }
+            }
+        }
+        System.out.println("Resultant Matrix:");
+        for (int i = 0; i < rowsA; i++) {
+            for (int j = 0; j < colsB; j++) {
+                System.out.print(result[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        scanner.close();
+    }
+}
+
+------------------------------------------------------------------------------------------
+import java.io.*;
+import java.util.Scanner;
+
+public class WordCountPgm{
+    public static void main(String[] args) {
+        String filePath = "sample.txt";
+        int wordCount = 0;
+        String[] words = new String[1000];
+        int[] wordFrequency = new int[1000];
+        int uniqueWordCount = 0;
+
+        try (FileReader fr = new FileReader(filePath);
+             Scanner scanner = new Scanner(fr)) {
+
+            while (scanner.hasNext()) {
+                String word = scanner.next();
+                wordCount++;
+
+                boolean found = false;
+                for (int i = 0; i < uniqueWordCount; i++) {
+                    if (words[i].equalsIgnoreCase(word)) {
+                        wordFrequency[i]++;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    words[uniqueWordCount] = word;
+                    wordFrequency[uniqueWordCount] = 1;
+                    uniqueWordCount++;
+                }
+            }
+
+            System.out.println("Total number of words: " + wordCount);
+            System.out.println("Repeated words and their counts:");
+
+            for (int i = 0; i < uniqueWordCount; i++) {
+                if (wordFrequency[i] > 1) {
+                    System.out.println(words[i] + ": " + wordFrequency[i]);
+                }
+            }
+
+            System.out.println("Palindrome words:");
+            for (int i = 0; i < uniqueWordCount; i++) {
+                if (isPalindrome(words[i])) {
+                    System.out.println(words[i]);
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading the file.");
+            e.printStackTrace();
+        }
+    }
+
+    private static boolean isPalindrome(String word) {
+        String cleanedWord = word.replaceAll("[^a-zA-Z]", "").toLowerCase();
+        String reversedWord = new StringBuilder(cleanedWord).reverse().toString();
+        return cleanedWord.equals(reversedWord);
+    }
+}
+
+
