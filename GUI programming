@@ -1,0 +1,157 @@
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.ButtonGroup;
+
+public class Calculator extends JFrame implements ActionListener {
+
+    private JPanel p;
+    private JTextField t;       // input 1
+    private JTextField t1;      // input 2
+    private JTextArea resultArea;
+    private JCheckBox chAdd, chSub, chMul;
+    private JRadioButton rbLog, rbSqrt, rbRandom;
+    private JButton btnCalculate;
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                Calculator frame = new Calculator();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public Calculator() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 450, 300);
+
+        p = new JPanel();
+        p.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(p);
+        p.setLayout(null);
+
+        t = new JTextField();
+        t.setBounds(39, 58, 96, 19);
+        p.add(t);
+        t.setColumns(10);
+
+        t1 = new JTextField();
+        t1.setBounds(302, 58, 96, 19);
+        p.add(t1);
+        t1.setColumns(10);
+
+        JLabel lb = new JLabel("Input 1");
+        lb.setHorizontalAlignment(SwingConstants.CENTER);
+        lb.setBounds(39, 88, 64, 13);
+        p.add(lb);
+
+        JLabel lb1 = new JLabel("Input 2");
+        lb1.setHorizontalAlignment(SwingConstants.CENTER);
+        lb1.setBounds(302, 88, 64, 13);
+        p.add(lb1);
+
+        chAdd = new JCheckBox("Add");
+        chAdd.setBounds(39, 123, 93, 21);
+        p.add(chAdd);
+
+        chSub = new JCheckBox("Sub");
+        chSub.setBounds(39, 146, 93, 21);
+        p.add(chSub);
+
+        chMul = new JCheckBox("Mul");
+        chMul.setBounds(39, 169, 93, 21);
+        p.add(chMul);
+
+        rbLog = new JRadioButton("log");
+        rbLog.setBounds(302, 121, 103, 21);
+        p.add(rbLog);
+
+        rbSqrt = new JRadioButton("sqrt");
+        rbSqrt.setBounds(302, 144, 90, 21);
+        p.add(rbSqrt);
+
+        rbRandom = new JRadioButton("random");
+        rbRandom.setBounds(302, 167, 103, 21);
+        p.add(rbRandom);
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(rbLog);
+        group.add(rbSqrt);
+        group.add(rbRandom);
+
+        JLabel lb2 = new JLabel("Result");
+        lb2.setHorizontalAlignment(SwingConstants.CENTER);
+        lb2.setBounds(60, 210, 53, 13);
+        p.add(lb2);
+
+        resultArea = new JTextArea();
+        resultArea.setBounds(134, 204, 165, 28);
+        resultArea.setEditable(false);
+        p.add(resultArea);
+
+        btnCalculate = new JButton("Calculate");
+        btnCalculate.setBounds(150, 170, 120, 25);
+        btnCalculate.addActionListener(this);
+        p.add(btnCalculate);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        try {
+            double x = Double.parseDouble(t.getText());
+            double y = Double.parseDouble(t1.getText());
+            StringBuilder sb = new StringBuilder();
+
+            if (chAdd.isSelected()) {
+                sb.append("Add: ").append(x + y).append(" ");
+            }
+            if (chSub.isSelected()) {
+                sb.append("Sub: ").append(x - y).append(" ");
+            }
+            if (chMul.isSelected()) {
+                sb.append("Mul: ").append(x * y).append(" ");
+            }
+            if (rbLog.isSelected()) {
+                if (x > 0 && y > 0) {
+                    sb.append("Log Input1 base Input2: ").append
+                    (Math.log(x) / Math.log(y)).append(" ");
+                } else {
+                    sb.append("Log inputs must be > 0. ");
+                }
+            }
+            if (rbSqrt.isSelected()) {
+                if (x >= 0 && y >= 0) {
+                    sb.append("Sqrt Input1: ").append(Math.sqrt(x)).
+                    append(", Input2: ").append(Math.sqrt(y)).append(" ");
+                } else {
+                    sb.append("Sqrt inputs must be >= 0. ");
+                }
+            }
+            if (rbRandom.isSelected()) {
+                sb.append("Random Input1 - Input2: ").append
+                (Math.random() * (y - x) + x).append(" ");
+            }
+
+            if (sb.length() == 0) {
+                sb.append("Select at least one operation.");
+            }
+
+            resultArea.setText(sb.toString());
+        } catch (NumberFormatException ex) {
+            resultArea.setText("Invalid input");
+        }
+    }
+}
