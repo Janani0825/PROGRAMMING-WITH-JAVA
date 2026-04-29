@@ -1,0 +1,213 @@
+import java.sql.*;
+import java.util.Scanner;
+
+class InvalidFlightNumberException extends Exception {
+    public InvalidFlightNumberException(String message) {
+        super(message);
+    }
+}
+
+class EmptyFlightNameException extends Exception {
+    public EmptyFlightNameException(String message) {
+        super(message);
+    }
+}
+
+public class AirlineDbConnector {
+    static final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
+    static final String DB_URL = "jdbc:oracle:thin:@172.16.16.50:1521:ORACLE21C";
+    static final String USER = "C##24BCS077";
+    static final String PASS = "C##24BCS077";
+
+    public static void main(String[] args) {
+        try {
+            Class.forName(JDBC_DRIVER);
+            System.out.println("Connecting to database...");
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("Connected.");
+
+            try (Statement stmt = conn.createStatement()) {
+                String createTableSQL = "CREATE TABLE tblairline (" +
+                        "flightNumber NUMBER PRIMARY KEY, " +
+                        "flightName VARCHAR2(100) NOT NULL, " +
+                        "departureTime VARCHAR2(20), " +
+                        "arrivalTime VARCHAR2(20), " +
+                        "source VARCHAR2(100), " +
+                        "destination VARCHAR2(100))";
+                stmt.executeUpdate(createTableSQL);
+                System.out.println("Table tblairline created.");
+            } catch (SQLException e) {
+                if (e.getErrorCode() == 955) {
+                    System.out.println("Table tblairline already exists.");
+                } else {
+                    throw e;
+                }
+            }
+
+            Scanner sc = new Scanner(System.in);
+            while (true) {
+                System.out.println("\nOptions\n");
+                System.out.println("1. Insert");
+                System.out.println("2. Delete");
+                System.out.println("3. Update");
+                System.out.println("4. Select");
+                System.out.println("5. Exit");
+                System.out.print("Enter your choice: ");
+                int ch = sc.nextInt();
+                sc.nextLine();
+
+                switch (ch) {
+                    case 1:
+                        try {
+                            System.out.print("Enter flight number: ");
+                            int flightNumber = sc.nextInt();
+                            sc.nextLine();
+                            if (flightNumber <= 0) {
+                                throw new InvalidFlightNumberException("Flight number must be positive.");
+                            }
+
+                            System.out.print("Enter flight name: ");
+                            String flightName = sc.nextLine().trim();
+                            if (flightName.isEmpty()) {
+                                throw new EmptyFlightNameException("Flight name cannot be empty.");
+                            }
+
+                            System.out.print("Enter departure time (e.g., 10:30): ");
+                            String departureTime = sc.nextLine();
+
+                            System.out.print("Enter arrival time (e.g., 14:45): ");
+                            String arrivalTime = sc.nextLine();
+
+                            System.out.print("Enter source: ");
+                            String source = sc.nextLine();
+
+                            System.out.print("Enter destination: ");
+                            String destination = sc.nextLine();
+
+                            String sql = "INSERT INTO tblairline(flightNumber, flightName, departureTime, arrivalTime, source, destination) VALUES (?, ?, ?, ?, ?, ?)";
+                            PreparedStatement pstmt = conn.prepareStatement(sql);
+                            pstmt.setInt(1, flightNumber);
+                            pstmt.setString(2, flightName);
+                            pstmt.setString(3, departureTime);
+                            pstmt.setString(4, arrivalTime);
+                            pstmt.setString(5, source);
+                            pstmt.setString(6, destination);
+
+                            int rows = pstmt.executeUpdate();
+                            System.out.println(rows + " row(s) inserted.");
+                            pstmt.close();
+                        } catch (InvalidFlightNumberException | EmptyFlightNameException e) {
+                            System.out.println("Input error: " + e.getMessage());
+                        }
+                        break;
+
+                    case 2:
+                        try {
+                            System.out.print("Enter flight number to delete: ");
+                            int flightNumberDel = sc.nextInt();
+                            sc.nextLine();
+                            if (flightNumberDel <= 0) {
+                                throw new InvalidFlightNumberException("Flight number must be positive.");
+                            }
+                            String sqlDel = "DELETE FROM tblairline WHERE flightNumber = ?";
+                            PreparedStatement pstmtDel = conn.prepareStatement(sqlDel);
+                            pstmtDel.setInt(1, flightNumberDel);
+
+                            int rowsDel = pstmtDel.executeUpdate();
+                            if (rowsDel > 0) {
+                                System.out.println("Flight deleted successfully.");
+                            } else {
+                                System.out.println("Flight not found.");
+                            }
+                            pstmtDel.close();
+                        } catch (InvalidFlightNumberException e) {
+                            System.out.println("Input error: " + e.getMessage());
+                        }
+                        break;
+
+                    case 3:
+                        try {
+                            System.out.print("Enter flight number to update: ");
+                            int flightNumberUpd = sc.nextInt();
+                            sc.nextLine();
+                            if (flightNumberUpd <= 0) {
+                                throw new InvalidFlightNumberException("Flight number must be positive.");
+                            }
+
+                            System.out.print("Enter new flight name: ");
+                            String flightNameUpd = sc.nextLine().trim();
+                            if (flightNameUpd.isEmpty()) {
+                                throw new EmptyFlightNameException("Flight name cannot be empty.");
+                            }
+
+                            System.out.print("Enter new departure time: ");
+                            String departureTimeUpd = sc.nextLine();
+
+                            System.out.print("Enter new arrival time: ");
+                            String arrivalTimeUpd = sc.nextLine();
+
+                            System.out.print("Enter new source: ");
+                            String sourceUpd = sc.nextLine();
+
+                            System.out.print("Enter new destination: ");
+                            String destinationUpd = sc.nextLine();
+
+                            String sqlUpd = "UPDATE tblairline SET flightName = ?, departureTime = ?, arrivalTime = ?, source = ?, destination = ? WHERE flightNumber = ?";
+                            PreparedStatement pstmtUpd = conn.prepareStatement(sqlUpd);
+                            pstmtUpd.setString(1, flightNameUpd);
+                            pstmtUpd.setString(2, departureTimeUpd);
+                            pstmtUpd.setString(3, arrivalTimeUpd);
+                            pstmtUpd.setString(4, sourceUpd);
+                            pstmtUpd.setString(5, destinationUpd);
+                            pstmtUpd.setInt(6, flightNumberUpd);
+
+                            int rowsUpd = pstmtUpd.executeUpdate();
+                            if (rowsUpd > 0) {
+                                System.out.println("Flight updated successfully.");
+                            } else {
+                                System.out.println("Flight not found.");
+                            }
+                            pstmtUpd.close();
+                        } catch (InvalidFlightNumberException | EmptyFlightNameException e) {
+                            System.out.println("Input error: " + e.getMessage());
+                        }
+                        break;
+
+                    case 4:
+                        String sqlSel = "SELECT flightNumber, flightName, departureTime, arrivalTime, source, destination FROM tblairline";
+                        try (Statement stmt = conn.createStatement();
+                             ResultSet rs = stmt.executeQuery(sqlSel)) {
+                            boolean found = false;
+                            while (rs.next()) {
+                                found = true;
+                                System.out.println("Flight Number: " + rs.getInt("flightNumber"));
+                                System.out.println("Flight Name: " + rs.getString("flightName"));
+                                System.out.println("Departure Time: " + rs.getString("departureTime"));
+                                System.out.println("Arrival Time: " + rs.getString("arrivalTime"));
+                                System.out.println("Source: " + rs.getString("source"));
+                                System.out.println("Destination: " + rs.getString("destination"));
+                                System.out.println("---------------------------");
+                            }
+                            if (!found) {
+                                System.out.println("No flight records found.");
+                            }
+                        }
+                        break;
+
+                    case 5:
+                        System.out.println("Exiting...");
+                        conn.close();
+                        sc.close();
+                        System.exit(0);
+                        break;
+
+                    default:
+                        System.out.println("Invalid choice.");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
