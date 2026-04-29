@@ -1,0 +1,17 @@
+import java.util.HashSet;
+public class HashSetToArray {
+   public static void main(String [] args){
+      HashSet <String> stringHashSet = new HashSet <> ();
+      stringHashSet.add("Pen");
+      stringHashSet.add("Pencil");
+      stringHashSet.add("Box");
+      stringHashSet.add("NoteBook");
+      System.out.println("HashSet"+ stringHashSet);
+      String[] stringArray = new String[ stringHashSet.size() ];
+      stringHashSet.toArray(stringArray);
+      System.out.println("Converted to Hash set");
+      for(String elt : stringArray){
+         System.out.println(elt);
+      }
+   }
+}
