@@ -1,17 +1,39 @@
-import java.util.HashSet;
-public class HashSetToArray {
-   public static void main(String [] args){
-      HashSet <String> stringHashSet = new HashSet <> ();
-      stringHashSet.add("Pen");
-      stringHashSet.add("Pencil");
-      stringHashSet.add("Box");
-      stringHashSet.add("NoteBook");
-      System.out.println("HashSet"+ stringHashSet);
-      String[] stringArray = new String[ stringHashSet.size() ];
-      stringHashSet.toArray(stringArray);
-      System.out.println("Converted to Hash set");
-      for(String elt : stringArray){
-         System.out.println(elt);
-      }
-   }
+class Box<T> {
+        private T data;
+
+        public Box(T data) {
+                this.data = data;
+        }
+
+        public T getData() {
+                return data;
+        }
+    public void setData(T data) {
+        this.data = data;
+        }
+}
+public class Main {
+         public static <E> void printArray(E[] array) {
+             for (E element : array) {
+                 System.out.print(element + " ");
+             }
+             System.out.println();
+         }
+         public static void main(String[] args) {
+             Box<Integer> intBox = new Box<>(100);
+             System.out.println("Integer Box contains : " + intBox.getData());
+             Box<String> strBox = new Box<>("Rubika");
+             System.out.println("String Box contains : " + strBox.getData());
+             Box<Double> doubleBox = new Box<>(99.54);
+             System.out.println("Double Box contains : " + doubleBox.getData());
+             Integer[] intArray = {1, 2, 3};
+             String[] strArray = {"Hi", "Rubika"};
+             Double[] doubleArray = {100.1, 100.2, 100.3, 100.4};
+             System.out.print("Integer array: ");
+             printArray(intArray);
+             System.out.print("String array: ");
+             printArray(strArray);
+             System.out.print("Double array: ");
+             printArray(doubleArray);
+         }
 }
